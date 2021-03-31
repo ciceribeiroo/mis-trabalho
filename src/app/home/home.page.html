@@ -13,7 +13,33 @@
           placeholder="Buscar cidade..."
           #searchInput
           (ionChange)="onSearch(searchInput.value)"
+          (click)="loadCache()"
         ></ion-searchbar>
+        
+        <ion-list lines="none" *ngIf="showHistory">
+          <ion-grid>
+            <ion-row>
+              <ion-col>
+                <div>
+                  <ion-text color="medium">Ultimas consultas</ion-text>
+                </div>
+              </ion-col>
+              <ion-col>
+                <div>
+                  <ion-button color="medium" offset-sm="4" size="small" (click)="clearCache()">Limpar Histórico</ion-button>
+                </div>
+              </ion-col>
+            </ion-row>
+          </ion-grid>
+
+          <app-city-details
+            *ngFor="let city of lastCities"
+            id="{{city.id}}"
+            name="{{city.name}}"
+            state="{{city.state}}"
+            (selectCity)="onSelectCity($event)"
+          ></app-city-details>
+        </ion-list>
         <app-error-message
           message="{{errorMessage}}"
           *ngIf="hasError"

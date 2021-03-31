@@ -12,6 +12,8 @@ import { LoadWeatherService } from 'src/domain/services/load-weather.service';
 import { LocalCityRepository } from 'src/data/local-city-repository';
 import { ApiWeatherRepository } from 'src/data/api-weather-repository';
 
+import { IonicStorageModule } from '@ionic/storage-angular';
+
 const createSearchCityService = () => {
   return new SearchCityService(new LocalCityRepository());
 };
@@ -28,6 +30,7 @@ const createLoadWeatherService = (http: HttpClient) => {
   entryComponents: [],
   imports: [
     BrowserModule,
+    IonicStorageModule.forRoot(),
     IonicModule.forRoot(),
     AppRoutingModule,
     HttpClientModule,

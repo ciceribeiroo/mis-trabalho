@@ -22,4 +22,7 @@ export class SearchCityService {
 
     return filteredCities;
   }
+  async getById(id:number){
+    return this.cityRepo.getById(id);
+  }
 }
