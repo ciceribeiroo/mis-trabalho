@@ -22,10 +22,11 @@ export class CacheService {
 
     async loadCache(): Promise<City[]>{
        this.cache = [];
-       this.storage.forEach((value) => {
-        this.cache.push(value)
+       await this.storage.forEach((value) => {
+            this.cache.push(value)
        })
        return this.cache;
+
     }
 
     async clearCache(){
@@ -41,6 +42,7 @@ export class CacheService {
 
     async setCache(cityId: string){
         try{
+            console.log(cityId)
             this.storage.set(cityId, await this.searchService.getById(Number(cityId)));
           }
           catch{
