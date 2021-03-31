@@ -22,7 +22,13 @@ export class HomePage {
     private readonly router: Router,
     private toastCtrl: ToastController,
     private cacheService: CacheService
-  ) {}
+  ) {
+    this.ngOnInit();
+  }
+     
+  async ngOnInit() {
+    this.loadCache();
+  }
 
   async onSearch(query: string) {
     try {
