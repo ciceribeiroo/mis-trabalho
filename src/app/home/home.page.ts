@@ -40,6 +40,7 @@ export class HomePage {
       else{
         this.showHistory = true;
       }
+      this.loadCache();
     } catch (error) {
       this.hasError = true;
       this.errorMessage = error.message;
@@ -47,7 +48,6 @@ export class HomePage {
   }
 
   async loadCache(){
-    this.lastCities = []
     this.lastCities = await this.cacheService.loadCache();
   }
 

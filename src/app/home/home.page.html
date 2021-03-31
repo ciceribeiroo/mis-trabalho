@@ -13,7 +13,6 @@
           placeholder="Buscar cidade..."
           #searchInput
           (ionChange)="onSearch(searchInput.value)"
-          (click)="loadCache()"
         ></ion-searchbar>
         
         <ion-list lines="none" *ngIf="showHistory">

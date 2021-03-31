@@ -6,6 +6,7 @@ import { Injectable } from '@angular/core';
 @Injectable({
   providedIn: 'root'
 })
+
 export class CacheService {
     cache: City[] = [];
 
@@ -22,8 +23,10 @@ export class CacheService {
 
     async loadCache(): Promise<City[]>{
        this.cache = [];
+       var i = 0;
        await this.storage.forEach((value) => {
-            this.cache.push(value)
+           this.cache.push(value)
+           i++;
        })
        return this.cache;
 
@@ -42,7 +45,6 @@ export class CacheService {
 
     async setCache(cityId: string){
         try{
-            console.log(cityId)
             this.storage.set(cityId, await this.searchService.getById(Number(cityId)));
           }
           catch{
