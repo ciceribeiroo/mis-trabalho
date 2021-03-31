@@ -2,8 +2,8 @@ import { Component } from '@angular/core';
 import { Router } from '@angular/router';
 import { City } from 'src/domain/entities/city';
 import { SearchCityService } from 'src/domain/services/search-city.service';
-import { Storage } from '@ionic/storage-angular';
 import { ToastController } from '@ionic/angular';
+import { CacheService } from 'src/domain/services/cache-service';
 
 @Component({
   selector: 'app-home',
@@ -20,13 +20,12 @@ export class HomePage {
   constructor(
     private readonly searchService: SearchCityService,
     private readonly router: Router,
-    private storage: Storage,
-    private toastCtrl: ToastController
-  ) {}
-
-  async ngOnInit() {
-    await this.storage.create();
-    this.loadCache();
+    private toastCtrl: ToastController,
+    private cacheService: CacheService
+  ) {
+  }
+  async ionViewDidEnter(){
+    this.lastCities = await this.cacheService.loadCache();
   }
 
   async onSearch(query: string) {
@@ -45,40 +44,17 @@ export class HomePage {
     }
   }
 
-  async loadCache(){
-    /*
-        let i = 0;
-    while(i < this.key){
-      console.log(i);
-      var cache: City =  await this.storage.get(i.toString());
-      console.log(cache)
-      this.lastCities.push(cache);
-      i++;
-    }
-    */
-   this.lastCities = [];
-   this.storage.forEach((value) => {
-    this.lastCities.push(value)
-   })
-  }
-
   async clearCache(){
+    this.lastCities = await this.cacheService.clearCache();
     let toast = this.toastCtrl.create({
       message: 'Historico Limpado!',
       duration: 2000
     })
     ;(await toast).present();
-    await this.storage.clear();
-    this.lastCities = []
   }
 
   async onSelectCity(cityId: string) {
     this.router.navigateByUrl(`/weather/${cityId}`);
-    try{
-      this.storage.set(cityId, await this.searchService.getById(Number(cityId)))
-    }
-    catch{
-      console.error();
-    }
+    this.cacheService.setCache(cityId);
   }
 }
