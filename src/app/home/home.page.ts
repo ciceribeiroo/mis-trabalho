@@ -26,6 +26,7 @@ export class HomePage {
   }
 
   async ngOnInit() {
+    this.lastCities = []
     this.loadCache();
   }
 
@@ -46,7 +47,8 @@ export class HomePage {
   }
 
   async loadCache(){
-      this.lastCities = await this.cacheService.loadCache();
+    this.lastCities = []
+    this.lastCities = await this.cacheService.loadCache();
   }
 
   async clearCache(){

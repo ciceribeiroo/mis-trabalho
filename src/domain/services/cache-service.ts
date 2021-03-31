@@ -17,8 +17,7 @@ export class CacheService {
         }
 
     async ngOnInit() {
-        const storage = await this.storage.create();
-        this.loadCache();
+        await this.storage.create();
     }
 
     async loadCache(): Promise<City[]>{
@@ -28,6 +27,7 @@ export class CacheService {
        })
        return this.cache;
     }
+
     async clearCache(){
         try{
             await this.storage.clear();
@@ -38,6 +38,7 @@ export class CacheService {
             console.error();
         }
     }
+
     async setCache(cityId: string){
         try{
             this.storage.set(cityId, await this.searchService.getById(Number(cityId)));
