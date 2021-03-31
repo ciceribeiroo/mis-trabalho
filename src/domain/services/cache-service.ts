@@ -1,6 +1,5 @@
 import { City } from '../entities/city';
 import { SearchCityService } from 'src/domain/services/search-city.service';
-
 import { Storage } from '@ionic/storage-angular';
 import { Injectable } from '@angular/core';
 

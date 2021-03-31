@@ -23,9 +23,8 @@ export class HomePage {
     private toastCtrl: ToastController,
     private cacheService: CacheService
   ) {
-    this.ngOnInit();
   }
-     
+
   async ngOnInit() {
     this.loadCache();
   }
