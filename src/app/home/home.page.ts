@@ -24,10 +24,8 @@ export class HomePage {
     private cacheService: CacheService
   ) {
   }
-
-  async ngOnInit() {
-    this.lastCities = []
-    this.loadCache();
+  async ionViewDidEnter(){
+    this.lastCities = await this.cacheService.loadCache();
   }
 
   async onSearch(query: string) {
@@ -40,15 +38,10 @@ export class HomePage {
       else{
         this.showHistory = true;
       }
-      this.loadCache();
     } catch (error) {
       this.hasError = true;
       this.errorMessage = error.message;
     }
-  }
-
-  async loadCache(){
-    this.lastCities = await this.cacheService.loadCache();
   }
 
   async clearCache(){
