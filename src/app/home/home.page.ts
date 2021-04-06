@@ -4,6 +4,7 @@ import { City } from 'src/domain/entities/city';
 import { SearchCityService } from 'src/domain/services/search-city.service';
 import { ToastController } from '@ionic/angular';
 import { SearchHistoryService } from 'src/domain/services/search-history-service';
+import { LocationService } from 'src/domain/services/location-services';
 
 @Component({
   selector: 'app-home',
@@ -16,16 +17,24 @@ export class HomePage {
   errorMessage: string;
   lastCities: City[] =[];
   showHistory: boolean = true;
+  lat: any = 0;
+  long: any = 0;
 
   constructor(
     private readonly router: Router,
     private toastCtrl: ToastController,
     private historyService: SearchHistoryService,
-    private searchService: SearchCityService
+    private searchService: SearchCityService,
+    private locationService: LocationService
   ) {}
   
   async ionViewDidEnter(){
     this.lastCities = await this.historyService.getHistory();
+  }
+
+  async getLocation(){
+    const city:City = await this.locationService.getCloserCity()
+    this.onSelectCity(city.id.toString())
   }
 
   async onSearch(query: string) {
