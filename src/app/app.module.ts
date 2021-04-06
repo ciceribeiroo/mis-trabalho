@@ -2,6 +2,7 @@ import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { RouteReuseStrategy } from '@angular/router';
 import { HttpClient, HttpClientModule } from '@angular/common/http';
+import { Geolocation } from '@ionic-native/geolocation/ngx';
 
 import { IonicModule, IonicRouteStrategy } from '@ionic/angular';
 
@@ -14,14 +15,22 @@ import { ApiWeatherRepository } from 'src/data/api-weather-repository';
 
 import { IonicStorageModule } from '@ionic/storage-angular';
 import { Storage } from '@ionic/storage-angular';
-import { CacheService } from 'src/domain/services/cache-service';
+import { SearchHistoryService } from 'src/domain/services/search-history-service';
+import { LocalHistoryRepository } from 'src/data/local-history-repository';
+import { LocationService } from 'src/domain/services/location-services';
+import { LocalLocationRepository } from 'src/data/local-location-repository';
 
 const createSearchCityService = () => {
   return new SearchCityService(new LocalCityRepository());
 };
-const createCacheService = () => {
-  return new CacheService(new Storage(), createSearchCityService());
-}
+
+const createHistoryService = () => {
+  return new SearchHistoryService(new LocalHistoryRepository(new Storage(), new LocalCityRepository()));
+};
+
+const createLocationService = () => {
+  return new LocationService(new LocalLocationRepository( new Geolocation(), new LocalCityRepository()), new Geolocation());
+};
 
 const createLoadWeatherService = (http: HttpClient) => {
   return new LoadWeatherService(
@@ -41,14 +50,19 @@ const createLoadWeatherService = (http: HttpClient) => {
     HttpClientModule,
   ],
   providers: [
+    Geolocation,
+    {
+      provide: LocationService,
+      useFactory: createLocationService,
+    },
     { provide: RouteReuseStrategy, useClass: IonicRouteStrategy },
     {
       provide: SearchCityService,
       useFactory: createSearchCityService,
     },
     {
-      provide: CacheService,
-      useFactory: createCacheService
+      provide: SearchHistoryService,
+      useFactory: createHistoryService
     },
     {
       provide: LoadWeatherService,
