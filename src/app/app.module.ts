@@ -29,7 +29,7 @@ const createHistoryService = () => {
 };
 
 const createLocationService = () => {
-  return new LocationService(new LocalLocationRepository( new Geolocation(), new LocalCityRepository()), new Geolocation());
+  return new LocationService(new LocalLocationRepository( new Geolocation(), new LocalCityRepository()));
 };
 
 const createLoadWeatherService = (http: HttpClient) => {

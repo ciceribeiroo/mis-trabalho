@@ -8,12 +8,27 @@ export class SearchHistoryService extends HistoryRepository{
     }
     
     getHistory(): Promise<City[]>{
-        return this.historyRepo.getHistory();
+        try{
+            return this.historyRepo.getHistory();
+        }
+        catch(error){
+            throw error;
+        }
     }
     setHistory(cityId: string): void{
-        this.historyRepo.setHistory(cityId);
+        try{
+            this.historyRepo.setHistory(cityId);
+        }
+        catch(error){
+            throw error;
+        }    
     }
     clearHistory(){
-        return this.historyRepo.clearHistory();
+        try{
+            return this.historyRepo.clearHistory();
+        }
+        catch(error){
+            throw error;
+        }  
     }
 }

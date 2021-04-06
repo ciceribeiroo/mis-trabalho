@@ -2,9 +2,11 @@ import { City } from "src/domain/entities/city";
 import { HistoryRepository } from "src/domain/services/protocols/history-repository";
 import { Storage } from '@ionic/storage-angular';
 import { CityRepository } from "src/domain/services/protocols/city-repository";
+import { Injectable } from "@angular/core";
+import { HistoryError } from "src/domain/errors/history.error";
 
+@Injectable()
 export class LocalHistoryRepository extends HistoryRepository{
-    history: City[] = [];
     constructor(private readonly storage: Storage,
         private readonly cityRepo: CityRepository){
         super();
@@ -16,13 +18,16 @@ export class LocalHistoryRepository extends HistoryRepository{
     }
 
     async getHistory(): Promise<City[]> {
-        this.history = [];
-       var i = 0;
-       await this.storage.forEach((value) => {
-           this.history.push(value)
-           i++;
-       })
-       return this.history;
+        try{
+            let history: City[] = [];
+            await this.storage.forEach((value) => {
+                history.push(value)
+            })
+            return history;
+        }
+        catch{
+            throw new HistoryError("Erro ao obter as cidades");
+        }
     }
 
     async setHistory(cityId: string) {
@@ -30,22 +35,23 @@ export class LocalHistoryRepository extends HistoryRepository{
             this.storage.set(cityId, await this.getCityById(Number(cityId)));
           }
           catch{
-            console.error();
+            throw new HistoryError("Erro ao adicionar cidade");
           }
     }
 
     async clearHistory(){
         try{
             await this.storage.clear();
-            this.history = [];
-            return this.history;
+            let history: City[] = [];
+            return history;
         }
         catch{
-            console.error();
+            throw new HistoryError("Erro ao limpar histórico");
         }
     }
 
     getCityById(id: number): Promise<City>{
+        //como passar a dependencia do cityRepo pro serviço?
         return this.cityRepo.getById(id);
     }
 }
