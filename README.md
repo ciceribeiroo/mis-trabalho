@@ -27,3 +27,5 @@ Para abrir a aplicação, execute o comando:
 `ionic serve`
 
 Enjoy!
+
+[Acesse aqui](https://climabr-trabalho.web.app/home)
