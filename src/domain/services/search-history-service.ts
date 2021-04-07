@@ -1,9 +1,12 @@
 import { LocalHistoryRepository } from 'src/data/local-history-repository';
 import { City } from '../entities/city';
+import { HistoryError } from '../errors/history.error';
+import { CityRepository } from './protocols/city-repository';
 import { HistoryRepository } from './protocols/history-repository';
 
 export class SearchHistoryService extends HistoryRepository{
-    constructor(private readonly historyRepo: LocalHistoryRepository){
+    constructor(private readonly historyRepo: LocalHistoryRepository,
+        private readonly cityRepo: CityRepository){
         super();
     }
     
@@ -15,13 +18,15 @@ export class SearchHistoryService extends HistoryRepository{
             throw error;
         }
     }
-    setHistory(cityId: string): void{
+    async setHistory(cityId: string, city: City = null): Promise<void>{
         try{
-            this.historyRepo.setHistory(cityId);
+            city = await this.cityRepo.getById(Number(cityId))
+            this.historyRepo.setHistory(cityId, city);
         }
         catch(error){
+            console.log("Pegou erro")
             throw error;
-        }    
+        }  
     }
     clearHistory(){
         try{

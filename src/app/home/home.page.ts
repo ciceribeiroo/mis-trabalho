@@ -80,7 +80,7 @@ export class HomePage {
     }
   }
 
-  async clearCache(){
+  async clearHistory(){
     try{
       this.lastCities = await this.historyService.clearHistory();
       this.createAlert("Histórico removido com sucesso!")   
@@ -92,14 +92,16 @@ export class HomePage {
   }
 
   async onSelectCity(cityId: string) {
-    this.router.navigateByUrl(`/weather/${cityId}`);
     try{
       this.historyService.setHistory(cityId);
+      this.router.navigateByUrl(`/weather/${cityId}`);
     }
     catch(error){
+      console.log("chegou aqui")
       console.error();
     }
   }
+  
   async createAlert(text: string){
     let toast = this.toastCtrl.create({
       message: text,

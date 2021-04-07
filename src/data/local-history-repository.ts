@@ -1,14 +1,13 @@
 import { City } from "src/domain/entities/city";
 import { HistoryRepository } from "src/domain/services/protocols/history-repository";
 import { Storage } from '@ionic/storage-angular';
-import { CityRepository } from "src/domain/services/protocols/city-repository";
 import { Injectable } from "@angular/core";
 import { HistoryError } from "src/domain/errors/history.error";
 
 @Injectable()
 export class LocalHistoryRepository extends HistoryRepository{
-    constructor(private readonly storage: Storage,
-        private readonly cityRepo: CityRepository){
+    id: string = "";
+    constructor(private readonly storage: Storage){
         super();
         this.ngOnInit();
     }
@@ -26,17 +25,18 @@ export class LocalHistoryRepository extends HistoryRepository{
             return history;
         }
         catch{
-            throw new HistoryError("Erro ao obter as cidades");
+            throw new HistoryError("Erro ao obter histórico");
         }
     }
 
-    async setHistory(cityId: string) {
-        try{
-            this.storage.set(cityId, await this.getCityById(Number(cityId)));
+    async setHistory(cityId: string, city: City): Promise<void> {
+        /*try{
+            this.storage.set(city.id.toString(), city);
           }
           catch{
-            throw new HistoryError("Erro ao adicionar cidade");
-          }
+            throw new HistoryError("Erro ao adicionar cidade ao histórico");
+          }*/
+          throw new HistoryError("Erro ao adicionar cidade ao histórico");
     }
 
     async clearHistory(){
@@ -48,10 +48,5 @@ export class LocalHistoryRepository extends HistoryRepository{
         catch{
             throw new HistoryError("Erro ao limpar histórico");
         }
-    }
-
-    getCityById(id: number): Promise<City>{
-        //como passar a dependencia do cityRepo pro serviço?
-        return this.cityRepo.getById(id);
     }
 }
