@@ -5,6 +5,9 @@ import { SearchCityService } from 'src/domain/services/search-city.service';
 import { ToastController } from '@ionic/angular';
 import { SearchHistoryService } from 'src/domain/services/search-history-service';
 import { LocationService } from 'src/domain/services/location-services';
+import { AlertController } from '@ionic/angular';
+import { PermissionDeniedLocationError } from 'src/domain/errors/permission-denied-location.error';
+import { HistoryError } from 'src/domain/errors/history.error';
 
 @Component({
   selector: 'app-home',
@@ -25,16 +28,41 @@ export class HomePage {
     private toastCtrl: ToastController,
     private historyService: SearchHistoryService,
     private searchService: SearchCityService,
-    private locationService: LocationService
+    private locationService: LocationService,
+    public alertController: AlertController
   ) {}
   
   async ionViewDidEnter(){
-    this.lastCities = await this.historyService.getHistory();
+    try{
+      this.lastCities = await this.historyService.getHistory();
+    }
+    catch(error){
+      console.error();
+      if(error instanceof HistoryError){
+        this.createAlert(error.message)
+      }
+    }
   }
 
   async getLocation(){
-    const city:City = await this.locationService.getCloserCity()
-    this.onSelectCity(city.id.toString())
+    try{
+      const city:City = await this.locationService.getCloserCity()
+      this.onSelectCity(city.id.toString())
+    }
+    catch(error){
+      if(error instanceof PermissionDeniedLocationError){
+        const alert = await this.alertController.create({
+          header: 'Atenção',
+          subHeader: 'A navegação foi desabilitada pelo usuário',
+          message: 'Para utilizar essa funcionalidade, é necessário acesso a sua localização',
+          buttons: ['Entendi'],
+        });
+        await alert.present();
+      }
+      if(error instanceof HistoryError){
+        this.createAlert(error.message)
+      }
+    }
   }
 
   async onSearch(query: string) {
@@ -54,17 +82,36 @@ export class HomePage {
     }
   }
 
-  async clearCache(){
-    this.lastCities = await this.historyService.clearHistory();
-    let toast = this.toastCtrl.create({
-      message: 'Historico Limpado!',
-      duration: 2000
-    })
-    ;(await toast).present();
+  async clearHistory(){
+    try{
+      this.lastCities = await this.historyService.clearHistory();
+      this.createAlert("Histórico removido com sucesso!")   
+    }
+    catch(error){
+      if(error instanceof HistoryError){
+        this.createAlert(error.message)
+      }
+    }
   }
 
   async onSelectCity(cityId: string) {
-    this.router.navigateByUrl(`/weather/${cityId}`);
-    this.historyService.setHistory(cityId);
+    try{
+      await this.historyService.setHistory(cityId);
+      this.router.navigateByUrl(`/weather/${cityId}`);
+    }
+    catch(error){
+      if(error instanceof HistoryError){
+        await this.createAlert(error.message)
+      }
+      console.error();
+    }
+  }
+  
+  async createAlert(text: string){
+    let toast = this.toastCtrl.create({
+      message: text,
+      duration: 2000
+    })
+    ;(await toast).present();
   }
 }
