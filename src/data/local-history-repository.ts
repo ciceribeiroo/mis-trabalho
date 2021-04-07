@@ -1,12 +1,13 @@
 import { City } from "src/domain/entities/city";
 import { HistoryRepository } from "src/domain/services/protocols/history-repository";
 import { Storage } from '@ionic/storage-angular';
-import { CityRepository } from "src/domain/services/protocols/city-repository";
+import { Injectable } from "@angular/core";
+import { HistoryError } from "src/domain/errors/history.error";
 
+@Injectable()
 export class LocalHistoryRepository extends HistoryRepository{
-    history: City[] = [];
-    constructor(private readonly storage: Storage,
-        private readonly cityRepo: CityRepository){
+    id: string = "";
+    constructor(private readonly storage: Storage){
         super();
         this.ngOnInit();
     }
@@ -16,36 +17,35 @@ export class LocalHistoryRepository extends HistoryRepository{
     }
 
     async getHistory(): Promise<City[]> {
-        this.history = [];
-       var i = 0;
-       await this.storage.forEach((value) => {
-           this.history.push(value)
-           i++;
-       })
-       return this.history;
+        try{
+            let history: City[] = [];
+            await this.storage.forEach((value) => {
+                history.push(value)
+            })
+            return history;
+        }
+        catch{
+            throw new HistoryError("Erro ao obter histórico");
+        }
     }
 
-    async setHistory(cityId: string) {
+    async setHistory(city: City): Promise<void> {
         try{
-            this.storage.set(cityId, await this.getCityById(Number(cityId)));
+            this.storage.set(city.id.toString(), city);
           }
           catch{
-            console.error();
+            throw new HistoryError("Erro ao adicionar cidade ao histórico");
           }
     }
 
     async clearHistory(){
         try{
             await this.storage.clear();
-            this.history = [];
-            return this.history;
+            let history: City[] = [];
+            return history;
         }
         catch{
-            console.error();
+            throw new HistoryError("Erro ao limpar histórico");
         }
-    }
-
-    getCityById(id: number): Promise<City>{
-        return this.cityRepo.getById(id);
     }
 }

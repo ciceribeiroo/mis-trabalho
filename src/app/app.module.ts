@@ -19,17 +19,18 @@ import { SearchHistoryService } from 'src/domain/services/search-history-service
 import { LocalHistoryRepository } from 'src/data/local-history-repository';
 import { LocationService } from 'src/domain/services/location-services';
 import { LocalLocationRepository } from 'src/data/local-location-repository';
+import { CityRepository } from 'src/domain/services/protocols/city-repository';
 
 const createSearchCityService = () => {
   return new SearchCityService(new LocalCityRepository());
 };
 
 const createHistoryService = () => {
-  return new SearchHistoryService(new LocalHistoryRepository(new Storage(), new LocalCityRepository()));
+  return new SearchHistoryService(new LocalHistoryRepository(new Storage()), new LocalCityRepository());
 };
 
 const createLocationService = () => {
-  return new LocationService(new LocalLocationRepository( new Geolocation(), new LocalCityRepository()), new Geolocation());
+  return new LocationService(new LocalLocationRepository( new Geolocation(), new LocalCityRepository()));
 };
 
 const createLoadWeatherService = (http: HttpClient) => {

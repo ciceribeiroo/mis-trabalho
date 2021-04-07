@@ -3,6 +3,7 @@ import { Coordinate } from "src/domain/entities/coordinate";
 import { LocationRepository } from "src/domain/services/protocols/location-repository";
 import { Geolocation } from '@ionic-native/geolocation/ngx';
 import { LocalCityRepository } from "./local-city-repository";
+import { PermissionDeniedLocationError } from "src/domain/errors/permission-denied-location.error";
 
 
 export class LocalLocationRepository extends LocationRepository{
@@ -33,13 +34,15 @@ export class LocalLocationRepository extends LocationRepository{
             latitude : 0,
             longitude : 0
         };
-        await this.geolocation.getCurrentPosition().then((resp) => {
-            cord.latitude = resp.coords.latitude;
-            cord.longitude = resp.coords.longitude;
-           }).catch((error) => {
-             console.log('Error getting location', error);
-           });
-        return cord;
+        try{
+            let myCord = await this.geolocation.getCurrentPosition();
+            cord.latitude = myCord.coords.latitude;
+            cord.longitude = myCord.coords.longitude;
+            return cord;
+        }
+        catch {
+            throw new PermissionDeniedLocationError();
+        }
     }
 
     haversineDistance(city: Coordinate): number {
