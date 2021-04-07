@@ -7,6 +7,7 @@ import { SearchHistoryService } from 'src/domain/services/search-history-service
 import { LocationService } from 'src/domain/services/location-services';
 import { AlertController } from '@ionic/angular';
 import { PermissionDeniedLocationError } from 'src/domain/errors/permission-denied-location.error';
+import { HistoryError } from 'src/domain/errors/history.error';
 
 @Component({
   selector: 'app-home',
@@ -37,7 +38,9 @@ export class HomePage {
     }
     catch(error){
       console.error();
-      this.createAlert(error)
+      if(error instanceof HistoryError){
+        this.createAlert(error.message)
+      }
     }
   }
 
@@ -51,14 +54,13 @@ export class HomePage {
         const alert = await this.alertController.create({
           header: 'Atenção',
           subHeader: 'A navegação foi desabilitada pelo usuário',
-          message: 'Para utilizar essa funcionalidade, é necessárioo acesso a sua localização',
+          message: 'Para utilizar essa funcionalidade, é necessário acesso a sua localização',
           buttons: ['Entendi'],
         });
         await alert.present();
       }
-      else{
-        console.error();
-        this.createAlert(error)
+      if(error instanceof HistoryError){
+        this.createAlert(error.message)
       }
     }
   }
@@ -86,18 +88,21 @@ export class HomePage {
       this.createAlert("Histórico removido com sucesso!")   
     }
     catch(error){
-      console.error();
-      this.createAlert(error)
+      if(error instanceof HistoryError){
+        this.createAlert(error.message)
+      }
     }
   }
 
   async onSelectCity(cityId: string) {
     try{
-      this.historyService.setHistory(cityId);
+      await this.historyService.setHistory(cityId);
       this.router.navigateByUrl(`/weather/${cityId}`);
     }
     catch(error){
-      console.log("chegou aqui")
+      if(error instanceof HistoryError){
+        await this.createAlert(error.message)
+      }
       console.error();
     }
   }

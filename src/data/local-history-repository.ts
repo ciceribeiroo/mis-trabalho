@@ -29,14 +29,13 @@ export class LocalHistoryRepository extends HistoryRepository{
         }
     }
 
-    async setHistory(cityId: string, city: City): Promise<void> {
-        /*try{
+    async setHistory(city: City): Promise<void> {
+        try{
             this.storage.set(city.id.toString(), city);
           }
           catch{
             throw new HistoryError("Erro ao adicionar cidade ao histórico");
-          }*/
-          throw new HistoryError("Erro ao adicionar cidade ao histórico");
+          }
     }
 
     async clearHistory(){
