@@ -2,7 +2,9 @@ import { City } from "src/domain/entities/city";
 import { HistoryRepository } from "src/domain/services/protocols/history-repository";
 import { Storage } from '@ionic/storage-angular';
 import { CityRepository } from "src/domain/services/protocols/city-repository";
+import { Injectable } from "@angular/core";
 
+@Injectable()
 export class LocalHistoryRepository extends HistoryRepository{
     history: City[] = [];
     constructor(private readonly storage: Storage,
