@@ -31,16 +31,16 @@ Enjoy!
 
 # Funcionalidades
 
-##Pesquisa por cidades
+## Pesquisa por cidades
 
 Digite pelo menos 3 letras e a aplicação irá buscar essas em uma lista de cidades brasileiras. Para acessar a previsão do tempo, clique na setinha no lado direito. 
 
 Na previsão do tempo, para mais informações, clique no botão Ver Detalhes.
 
-##Pesquisa pela localização atual
+## Pesquisa pela localização atual
 
 Clique no botão de "Minha localização" para consultar a previsão do tempo para sua localização. Para essa funcionalidade é necessário permitir o acesso da aplicação a sua localização.
 
-##Histórico de cidades consultadas
+## Histórico de cidades consultadas
 
 O aplicativo guarda um histórico das cidades que já foram consultadas pelo usuário na aplicação. Ele aparece quando não há uma lista de cidades retornada pela pesquisa.
