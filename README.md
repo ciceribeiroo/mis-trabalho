@@ -35,17 +35,17 @@ Enjoy!
 
 Digite pelo menos 3 letras e a aplicação irá buscar essas em uma lista de cidades brasileiras. Para acessar a previsão do tempo, clique na setinha no lado direito. 
 
-![Pesquisa Climabr](img-readme/pesquisa.PNG)
+![Pesquisa Climabr](img-readme/pesquisar.PNG)
 
 Na previsão do tempo, para mais informações, clique no botão Ver Detalhes.
 
-![Mais detalhes](img-readme/previsão.PNG)
+![Mais detalhes](img-readme/previsao.PNG)
 
 ## Pesquisa pela localização atual
 
 Clique no botão de "Minha localização" para consultar a previsão do tempo para sua localização. Para essa funcionalidade é necessário permitir o acesso da aplicação a sua localização.
 
-![Permissão de acesso a localização](img-readme/permissão.PNG)
+![Permissão de acesso a localização](img-readme/permissao.png)
 
 ## Histórico de cidades consultadas
 
