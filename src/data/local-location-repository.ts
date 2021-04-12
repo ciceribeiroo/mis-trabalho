@@ -5,7 +5,6 @@ import { Geolocation } from '@ionic-native/geolocation/ngx';
 import { LocalCityRepository } from "./local-city-repository";
 import { PermissionDeniedLocationError } from "src/domain/errors/permission-denied-location.error";
 
-
 export class LocalLocationRepository extends LocationRepository{
     atualCordinates: Coordinate = null
     constructor(private geolocation: Geolocation,

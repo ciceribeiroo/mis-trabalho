@@ -93,7 +93,7 @@ export class HomePage {
       }
     }
   }
-
+  
   async onSelectCity(cityId: string) {
     try{
       await this.historyService.setHistory(cityId);

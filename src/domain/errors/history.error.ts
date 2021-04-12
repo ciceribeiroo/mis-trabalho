@@ -4,4 +4,3 @@ export class HistoryError extends Error {
       super.name = 'History Error';
     }
   }
-  

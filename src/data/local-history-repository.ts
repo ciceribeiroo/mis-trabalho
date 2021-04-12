@@ -6,7 +6,6 @@ import { HistoryError } from "src/domain/errors/history.error";
 
 @Injectable()
 export class LocalHistoryRepository extends HistoryRepository{
-    id: string = "";
     constructor(private readonly storage: Storage){
         super();
         this.ngOnInit();
