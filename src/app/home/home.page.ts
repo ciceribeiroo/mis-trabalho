@@ -1,11 +1,13 @@
 import { Component } from '@angular/core';
 import { Router } from '@angular/router';
-import { City } from 'src/domain/entities/city';
+import { AlertController } from '@ionic/angular';
 import { SearchCityService } from 'src/domain/services/search-city.service';
 import { ToastController } from '@ionic/angular';
+
 import { SearchHistoryService } from 'src/domain/services/search-history-service';
 import { LocationService } from 'src/domain/services/location-services';
-import { AlertController } from '@ionic/angular';
+import { City } from 'src/domain/entities/city';
+
 import { PermissionDeniedLocationError } from 'src/domain/errors/permission-denied-location.error';
 import { HistoryError } from 'src/domain/errors/history.error';
 
@@ -20,8 +22,6 @@ export class HomePage {
   errorMessage: string;
   lastCities: City[] =[];
   showHistory: boolean = true;
-  lat: any = 0;
-  long: any = 0;
 
   constructor(
     private readonly router: Router,
